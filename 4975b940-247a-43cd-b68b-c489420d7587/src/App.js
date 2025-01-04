@@ -21,11 +21,24 @@ const faqs = [
 export default function App() {
   return (
     <div>
-      <Accordion />
+      <Accordion data={faqs}/>
     </div>
   );
 }
 
-function Accordion() {
-  return <div>TODO</div>;
+function Accordion({ data }) {
+  return( <div className="accordion">
+    {data.map((c, i)=>(
+      <AccordionItem title={c.title} text={c.text} num={i} />
+    ))}
+  </div>
+  );
+}
+function AccordionItem({num, title, text}){
+  return<div className="item">
+    <p className="number">{num}</p>
+    <p className="text">{title}</p>
+    <p className="icon">-</p>
+    <div className="content-box">{text}</div>
+  </div>
 }
