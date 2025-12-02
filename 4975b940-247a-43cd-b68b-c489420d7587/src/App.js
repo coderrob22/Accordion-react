@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./styles.css";
+import AccordionItem from "react-bootstrap/esm/AccordionItem";
 
 const faqs = [
   {
@@ -28,19 +29,29 @@ export default function App() {
 }
 
 function Accordion({ data }) {
+  const [curOpen, setCurrOpen] = useState(null);
   return( 
     <div className="accordion">
       {data.map((c, i)=>(
-        <AccordionItem title={c.title} text={c.text} num={i} key={c.title}/>
-    ))}
-  </div>
+        <LocalAccordionItem
+          curOpen={curOpen} 
+          onOpen={setCurrOpen} 
+          title={c.title} 
+          num={i} 
+          key={c.title}
+        >
+          {c.text}
+        </LocalAccordionItem> 
+      ))}
+    </div>
   );
 }
-function AccordionItem({num, title, text}){
-  const [isOpen, setIsOpen] = useState(false);
+function LocalAccordionItem({num, title, curOpen, onOpen, children }){
+  const isOpen = num === curOpen;
 
   function handleToggle(){
-    setIsOpen((isOpen)=>!isOpen);
+    onOpen(isOpen ? null : num);
+    //setIsOpen((isOpen)=>!isOpen);
   }
 
   return(
@@ -48,7 +59,7 @@ function AccordionItem({num, title, text}){
     <p className="number">{num < 9? `0${num+1}`: num + 1 }</p>
     <p className="title">{title}</p>
     <p className="icon">{isOpen ? "-" : "+"}</p>
-    {isOpen && <div className="content-box">{text}</div>}
+    {isOpen && <div className="content-box">{children}</div>}
   </div>
   )
 }
